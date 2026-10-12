@@ -23,11 +23,24 @@ export default async function ResourcePage({ params }: { params: Promise<{ id: s
   if (!profile) return null;
 
   const supabase = await createClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("resources")
-    .select("*, uploader:users(program, year_level)")
+    .select("*, uploader:users!uploader_id(program, year_level)")
     .eq("id", id)
     .maybeSingle();
+
+  // A failed query is not the same as a missing material: show the real problem.
+  if (error) {
+    return (
+      <div role="alert" className="rounded-md bg-seal-light px-4 py-3 text-seal-dark">
+        <p className="font-semibold">Couldn&apos;t load this material.</p>
+        <p className="mt-1 text-sm">{error.message}</p>
+        <Link href="/dashboard" className="mt-3 inline-block text-sm font-semibold underline">
+          Back to materials
+        </Link>
+      </div>
+    );
+  }
   if (!data) notFound();
   const resource = data as Resource;
 

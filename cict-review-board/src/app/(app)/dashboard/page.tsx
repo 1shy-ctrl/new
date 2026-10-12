@@ -33,7 +33,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
 
   const supabase = await createClient();
 
-  let query = supabase.from("resources").select("*, uploader:users(program, year_level)").limit(LIMIT);
+  let query = supabase.from("resources").select("*, uploader:users!uploader_id(program, year_level)").limit(LIMIT);
   if (program !== "all") query = query.eq("program", program);
   if (year !== "all") query = query.eq("year_level", Number(year));
   if (course) query = query.ilike("course_code", `%${course}%`);
