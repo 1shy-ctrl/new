@@ -4,4 +4,4 @@ insert into public.enrolled_students (student_id) values
   ('TCU-0000-0001'),
   ('TCU-0000-0002'),
   ('TCU-0000-0003')
-on conflict do nothing;
+on conflict do nothing;m
